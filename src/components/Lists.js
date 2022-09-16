@@ -1,7 +1,7 @@
 import React from 'react'
 import ListItem from './ListItem'
 
-const Lists = ({ todos, delHandler, doneHandler }) => {
+const Lists = ({ todos, delHandler, editHandler, doneHandler }) => {
   if (todos.length <= 0) {
     return (
       <div className='jumbotron text-center'>
@@ -23,6 +23,7 @@ const Lists = ({ todos, delHandler, doneHandler }) => {
               title={todo.title}
               done={todo.done}
               delHandler={delHandler}
+              editHandler={editHandler}
               doneHandler={doneHandler}
             />
           ))}

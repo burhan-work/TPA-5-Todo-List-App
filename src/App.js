@@ -8,16 +8,24 @@ const App = () => {
   const [error, setError] = useState(null)
   const [todo, setTodo] = useState('')
   const [todos, setTodos] = useState([])
+  const [edit, editTodos] = useState(null)
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem('todos'))
     if (storedTodos) setTodos(storedTodos)
   }, [])
 
-  // saving the todos in browser storage to prevent loss of todos on refreshing tab
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos))
   }, [todos])
+
+  // const updateTodos = (title, id, completed) => {
+  //   const newT = todos.map((todos) => {
+  //     todos.id === id ? {title: todo, id, completed} : todos
+  //   })
+  //   setTodos(newT)
+  //   editTodos(null)
+  // }
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -27,10 +35,21 @@ const App = () => {
       return false
     }
 
-    setTodos([{ id: Date.now(), title: todo, done: false }, ...todos])
+    // setTodos([{ id: Date.now(), title: todo, done: false }, ...todos])
+    //   editTodos(null)
+    //   setTodo('')
+    //   setError(null)
 
-    setTodo('')
-    setError(null)
+    if (!edit){
+      setTodos([{ id: Date.now(), title: todo, done: false }, ...todos])
+      editTodos(null)
+      setTodo('')
+      setError(null)
+    } 
+    // else {
+    //   updateTodos(todo, edit.id, edit.completed)
+    // }
+    
   }
 
   const delHandler = (todoId) => {
@@ -39,6 +58,11 @@ const App = () => {
 
       setTodos(updatedTodos)
     }
+  }
+
+  const editHandler = (todoId)=>{
+    const findTodo = todos.find((todo) => edit.id === todoId)
+    editTodos(findTodo)
   }
 
   const doneHandler = (todoId) => {
@@ -64,7 +88,7 @@ const App = () => {
         onChange={(e) => setTodo(e.target.value)}
       />
       <hr className='border-primary' />
-      <Lists todos={todos} delHandler={delHandler} doneHandler={doneHandler} />
+      <Lists todos={todos} delHandler={delHandler} editHandler={editHandler} doneHandler={doneHandler} />
     </Layout>
   )
 }
